@@ -1,6 +1,6 @@
 import random
 from datetime import datetime
-from ..models import Metric
+from models import Metric
 
 class QuantumSimulator:
     def __init__(self, computer_id: str):

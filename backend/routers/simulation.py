@@ -16,9 +16,10 @@ simulation_state = {
 
 influxdb_service: Optional[InfluxDBService] = None
 
-def set_influxdb(service: InfluxDBService):
+def set_influxdb_service(service: InfluxDBService):
     global influxdb_service
     influxdb_service = service
+    print("InfluxDB Service has been set.")
 
 async def simulation_loop():
     computer_ids = ["qc-001", "qc-002", "qc-003"]
@@ -65,11 +66,11 @@ async def stop_simulation():
     if not simulation_state["running"]:
         raise HTTPException(status_code=400, detail="Simulation cannot be stopped as it is not running.")
 
-    simulation_state["running"] = False
-
     if simulation_state["task"]:
         await simulation_state["task"]
         simulation_state["task"] = None
+
+    simulation_state["running"] = False
 
     return {
         "status": "stopped",
@@ -81,3 +82,11 @@ async def get_simulation_status() -> Dict[str, bool]:
     return {
         "running": simulation_state["running"]
     }
+
+async def cleanup():
+    if simulation_state["running"]:
+        print("Stopping simulation...")
+        simulation_state["running"] = False
+        if simulation_state["task"] is not None:
+            await simulation_state["task"]
+            simulation_state["task"] = None
