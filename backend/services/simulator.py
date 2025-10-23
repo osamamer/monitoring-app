@@ -40,3 +40,12 @@ class QuantumSimulator:
             value=round(temp, 1),
             unit="mK"
         )
+
+    def generate_all_metrics(self) -> list[Metric]:
+        return [
+            self.generate_qubit_fidelity(),
+            self.generate_gate_error_rate(),
+            self.generate_temperature()
+        ]
+
+
