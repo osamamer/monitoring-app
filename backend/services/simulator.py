@@ -39,5 +39,4 @@ class QuantumSimulator:
             metric_name="temperature",
             value=round(temp, 1),
             unit="mK"
-
         )
