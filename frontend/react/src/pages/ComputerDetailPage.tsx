@@ -9,6 +9,7 @@ function ComputerDetailPage() {
     const [computer, setComputer] = useState<QuantumComputer | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const DASHBOARD_ID = "ad4g5sq";
 
     useEffect(() => {
         if (!id) return;
@@ -131,7 +132,7 @@ function ComputerDetailPage() {
                         title="Qubit Fidelity"
                         description="Measures how accurately qubits maintain their quantum state"
                         // REPLACE WITH YOUR ACTUAL GRAFANA EMBED URL
-                        url={`http://localhost:3000/d-solo/YOUR_DASHBOARD_ID/quantum-metrics?orgId=1&from=now-5m&to=now&panelId=1&theme=dark&var-computer_id=${computer.id}`}
+                        url={`http://localhost:3000/d-solo/${DASHBOARD_ID}/quantum-metrics?orgId=1&from=now-5m&to=now&panelId=1&theme=dark&var-computer_id=${computer.id}`}
                     />
 
                     {/* Gate Error Rate Panel */}
@@ -139,7 +140,7 @@ function ComputerDetailPage() {
                         title="Gate Error Rate"
                         description="Probability of errors during quantum gate operations"
                         // REPLACE WITH YOUR ACTUAL GRAFANA EMBED URL
-                        url={`http://localhost:3000/d-solo/YOUR_DASHBOARD_ID/quantum-metrics?orgId=1&from=now-5m&to=now&panelId=2&theme=dark&var-computer_id=${computer.id}`}
+                        url={`http://localhost:3000/d-solo/${DASHBOARD_ID}/quantum-metrics?orgId=1&from=now-5m&to=now&panelId=2&theme=dark&var-computer_id=${computer.id}`}
                     />
 
                     {/* Temperature Panel */}
@@ -147,7 +148,7 @@ function ComputerDetailPage() {
                         title="Operating Temperature"
                         description="System temperature in millikelvin - critical for quantum coherence"
                         // REPLACE WITH YOUR ACTUAL GRAFANA EMBED URL
-                        url={`http://localhost:3000/d-solo/YOUR_DASHBOARD_ID/quantum-metrics?orgId=1&from=now-5m&to=now&panelId=3&theme=dark&var-computer_id=${computer.id}`}
+                        url={`http://localhost:3000/d-solo/${DASHBOARD_ID}/quantum-metrics?orgId=1&from=now-5m&to=now&panelId=3&theme=dark&var-computer_id=${computer.id}`}
                     />
                 </div>
             </div>
