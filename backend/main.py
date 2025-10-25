@@ -1,10 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from services.influxdb_service import InfluxDBService
-from routers import quantum_computers, simulation
+from services.postgres_db import init_db
+from routers import quantum_computers, simulation, auth
 from routers.simulation import set_influxdb_service, cleanup
 import os
 from contextlib import asynccontextmanager
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 influxdb_service = InfluxDBService(
     url=os.getenv("INFLUXDB_URL", "http://localhost:8086"),
@@ -18,9 +23,9 @@ print(f"InfluxDB service created")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     print("Starting up...")
+    init_db()
     set_influxdb_service(influxdb_service)
     yield
-    # SHUTDOWN
     print("Shutting down...")
     await cleanup()
     influxdb_service.close()
@@ -44,6 +49,7 @@ app.add_middleware(
 
 app.include_router(quantum_computers.router)
 app.include_router(simulation.router)
+app.include_router(auth.router)
 
 
 @app.get("/")
