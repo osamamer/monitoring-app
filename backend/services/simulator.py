@@ -1,5 +1,5 @@
 import random
-from datetime import datetime
+from datetime import datetime, timezone
 from models import Metric
 
 class QuantumSimulator:
@@ -11,7 +11,7 @@ class QuantumSimulator:
         noise = random.uniform(-0.2, 0.2)
         fidelity = base_fidelity + noise
         return Metric(
-            timestamp=datetime.now(),
+            timestamp=datetime.now(timezone.utc), # ESSENTIAL: USE TIMEZONE!!!
             computer_id=self.computer_id,
             metric_name="qubit_fidelity",
             value=round(fidelity, 2),
@@ -23,7 +23,7 @@ class QuantumSimulator:
         noise = random.uniform(-0.1, 0.1)
         gate_error_rate = base_error + noise
         return Metric(
-            timestamp=datetime.now(),
+            timestamp=datetime.now(timezone.utc),
             computer_id=self.computer_id,
             metric_name="gate_error_rate",
             value=round(gate_error_rate, 3),
@@ -34,7 +34,7 @@ class QuantumSimulator:
         noise = random.uniform(-2.0, 2.0)
         temp = base_temp + noise
         return Metric(
-            timestamp=datetime.now(),
+            timestamp=datetime.now(timezone.utc),
             computer_id=self.computer_id,
             metric_name="temperature",
             value=round(temp, 1),
