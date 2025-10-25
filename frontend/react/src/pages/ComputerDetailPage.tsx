@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { quantumComputerAPI } from '../services/Api';
 import type {QuantumComputer} from '../types';
+import {GrafanaPanel} from "../components/GrafanaPanel.tsx";
 
 function ComputerDetailPage() {
     const { id } = useParams<{ id: string }>();
@@ -9,7 +10,7 @@ function ComputerDetailPage() {
     const [computer, setComputer] = useState<QuantumComputer | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const DASHBOARD_ID = "ad4g5sq";
+    const DASHBOARD_ID = "adh48br";
 
     useEffect(() => {
         if (!id) return;
@@ -131,24 +132,29 @@ function ComputerDetailPage() {
                     <GrafanaPanel
                         title="Qubit Fidelity"
                         description="Measures how accurately qubits maintain their quantum state"
-                        // REPLACE WITH YOUR ACTUAL GRAFANA EMBED URL
-                        url={`http://localhost:3000/d-solo/${DASHBOARD_ID}/quantum-metrics?orgId=1&from=now-5m&to=now&panelId=1&theme=dark&var-computer_id=${computer.id}`}
+                        computerId={computer.id}
+                        metric="qubit_fidelity"
+                        panelId="panel-1"
+
                     />
 
                     {/* Gate Error Rate Panel */}
                     <GrafanaPanel
                         title="Gate Error Rate"
                         description="Probability of errors during quantum gate operations"
-                        // REPLACE WITH YOUR ACTUAL GRAFANA EMBED URL
-                        url={`http://localhost:3000/d-solo/${DASHBOARD_ID}/quantum-metrics?orgId=1&from=now-5m&to=now&panelId=2&theme=dark&var-computer_id=${computer.id}`}
+                        computerId={computer.id}
+                        metric="gate_error_rate"
+                        panelId="panel-1"
                     />
 
                     {/* Temperature Panel */}
                     <GrafanaPanel
                         title="Operating Temperature"
                         description="System temperature in millikelvin - critical for quantum coherence"
-                        // REPLACE WITH YOUR ACTUAL GRAFANA EMBED URL
-                        url={`http://localhost:3000/d-solo/${DASHBOARD_ID}/quantum-metrics?orgId=1&from=now-5m&to=now&panelId=3&theme=dark&var-computer_id=${computer.id}`}
+                        computerId={computer.id}
+                        metric="temperature"
+                        panelId="panel-1"
+
                     />
                 </div>
             </div>
@@ -156,34 +162,6 @@ function ComputerDetailPage() {
     );
 }
 
-// Reusable Grafana Panel Component
-interface GrafanaPanelProps {
-    title: string;
-    description: string;
-    url: string;
-}
 
-function GrafanaPanel({ title, description, url }: GrafanaPanelProps) {
-    return (
-        <div className="bg-dark-card border border-dark-border rounded-2xl p-6 shadow-lg">
-            <div className="mb-4">
-                <h3 className="text-2xl font-bold text-text-primary mb-2">{title}</h3>
-                <p className="text-text-secondary text-sm">{description}</p>
-            </div>
-
-            {/* The actual Grafana iframe */}
-            <div className="bg-dark-bgSecondary rounded-xl overflow-hidden">
-                <iframe
-                    src={url}
-                    width="100%"
-                    height="400"
-                    frameBorder="0"
-                    className="rounded-xl"
-                    title={title}
-                />
-            </div>
-        </div>
-    );
-}
 
 export default ComputerDetailPage;

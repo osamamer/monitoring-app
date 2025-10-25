@@ -35,7 +35,7 @@ async def simulation_loop():
             for comp_id, simulator in simulators.items():
                 metrics = simulator.generate_all_metrics()
                 influxdb_service.write_metrics(metrics)
-                print(f"Generated {len(metrics)} metrics for computer {comp_id}")
+                # print(f"Generated {len(metrics)} metrics for computer {comp_id}")
 
             await asyncio.sleep(5)
 
