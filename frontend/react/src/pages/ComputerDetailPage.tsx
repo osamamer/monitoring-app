@@ -10,7 +10,6 @@ function ComputerDetailPage() {
     const [computer, setComputer] = useState<QuantumComputer | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const DASHBOARD_ID = "adh48br";
 
     useEffect(() => {
         if (!id) return;

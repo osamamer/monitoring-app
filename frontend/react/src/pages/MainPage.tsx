@@ -60,11 +60,10 @@ function MainPage() {
             <header className="text-center mb-12">
                 <h1 className="text-5xl font-bold text-text-primary mb-4 flex items-center justify-center gap-4">
                     Quantum Computing Dashboard
-                    <span className="text-6xl">⚛️</span>
 
                 </h1>
                 <p className="text-xl text-text-secondary">
-                    Real-time monitoring of quantum computer systems
+                    Real-time monitoring of quantum computers
                 </p>
             </header>
 
