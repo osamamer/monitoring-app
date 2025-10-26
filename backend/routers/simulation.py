@@ -11,7 +11,7 @@ router = APIRouter(
 
 simulation_state = {
     "running": False,
-    "task": Optional[asyncio.Task]
+    "task": None
 }
 
 influxdb_service: Optional[InfluxDBService] = None
@@ -30,21 +30,24 @@ async def simulation_loop():
 
     print("Simulation Started.")
 
-    while simulation_state["running"]:
-        try:
-            for comp_id, simulator in simulators.items():
-                metrics = simulator.generate_all_metrics()
-                influxdb_service.write_metrics(metrics)
-                # print(f"Generated {len(metrics)} metrics for computer {comp_id}")
+    try:
+        while simulation_state["running"]:
+            try:
+                for comp_id, simulator in simulators.items():
+                    metrics = simulator.generate_all_metrics()
+                    influxdb_service.write_metrics(metrics)
 
-            await asyncio.sleep(5)
+                await asyncio.sleep(5)
 
-        except Exception as e:
-            print(f"Error in simulation loop: {e}")
-            simulation_state["running"] = False
-            break
-
-    print("Simulated stopped.")
+            except asyncio.CancelledError:
+                print("Simulation loop cancelled.")
+                raise
+            except Exception as e:
+                print(f"Error in simulation loop: {e}")
+                simulation_state["running"] = False
+                break
+    finally:
+        print("Simulation stopped.")
 
 @router.post("/start")
 async def start_simulation():
@@ -63,14 +66,22 @@ async def start_simulation():
 
 @router.post("/stop")
 async def stop_simulation():
+    print("Attempting to stop simulation.")
     if not simulation_state["running"]:
         raise HTTPException(status_code=400, detail="Simulation cannot be stopped as it is not running.")
 
-    if simulation_state["task"]:
-        await simulation_state["task"]
-        simulation_state["task"] = None
-
     simulation_state["running"] = False
+
+    if simulation_state["task"]:
+        print("Cancelling simulation task...")
+        simulation_state["task"].cancel()
+
+        try:
+            await simulation_state["task"]
+        except asyncio.CancelledError:
+            print("Task successfully cancelled.")
+
+        simulation_state["task"] = None
 
     return {
         "status": "stopped",
@@ -88,5 +99,9 @@ async def cleanup():
         print("Stopping simulation...")
         simulation_state["running"] = False
         if simulation_state["task"] is not None:
-            await simulation_state["task"]
+            simulation_state["task"].cancel()
+            try:
+                await simulation_state["task"]
+            except asyncio.CancelledError:
+                print("Cleanup: Task cancelled successfully.")
             simulation_state["task"] = None

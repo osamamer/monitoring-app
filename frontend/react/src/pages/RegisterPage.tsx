@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
+import { theme } from '../styles/theme.ts';
 
 export function RegisterPage() {
     const navigate = useNavigate();
@@ -10,8 +11,8 @@ export function RegisterPage() {
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -43,17 +44,40 @@ export function RegisterPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-            <div className="max-w-md w-full space-y-8">
-                <div>
-                    <h2 className="text-center text-3xl font-bold text-gray-900">
-                        Create your account
+        <div
+            className="min-h-screen flex items-center justify-center px-4"
+            style={{ background: theme.colors.background }}
+        >
+            <div className="w-full max-w-md">
+                <div className="text-center mb-8">
+                    {/*<div className="text-6xl mb-4">⚛️</div>*/}
+                    <h2 className="text-4xl font-bold mb-2" style={{ color: theme.colors.text }}>
+                        Quantum Dashboard
                     </h2>
+                    <p className="text-lg" style={{ color: theme.colors.textSecondary }}>
+                        Create your account to get started
+                    </p>
                 </div>
 
-                <form className="mt-8 space-y-6 bg-white p-8 rounded-lg shadow" onSubmit={handleSubmit}>
+                <form
+                    className="p-8 border border-gray-800"
+                    style={{
+                        background: theme.colors.backgroundSecondary,
+                        borderRadius: theme.borderRadius.lg,
+                        boxShadow: theme.shadows.card
+                    }}
+                    onSubmit={handleSubmit}
+                >
                     {error && (
-                        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded">
+                        <div
+                            className="mb-6 px-4 py-3 border"
+                            style={{
+                                background: `${theme.colors.error}1A`,
+                                borderColor: theme.colors.error,
+                                color: theme.colors.error,
+                                borderRadius: theme.borderRadius.md
+                            }}
+                        >
                             {error}
                         </div>
                     )}
@@ -66,6 +90,7 @@ export function RegisterPage() {
                         required
                         autoComplete="name"
                     />
+
                     <Input
                         label="Username"
                         type="text"
@@ -103,12 +128,18 @@ export function RegisterPage() {
                     />
 
                     <Button type="submit" isLoading={isLoading}>
-                        Sign up
+                        Create Account
                     </Button>
 
-                    <div className="text-center text-sm">
-                        <span className="text-gray-600">Already have an account? </span>
-                        <Link to="/login" className="text-blue-600 hover:text-blue-700 font-medium">
+                    <div className="text-center text-sm mt-6">
+                        <span style={{ color: theme.colors.textSecondary }}>Already have an account? </span>
+                        <Link
+                            to="/login"
+                            className="font-medium transition-colors"
+                            style={{ color: theme.colors.primary }}
+                            onMouseEnter={(e) => e.currentTarget.style.color = theme.colors.primaryHover}
+                            onMouseLeave={(e) => e.currentTarget.style.color = theme.colors.primary}
+                        >
                             Sign in
                         </Link>
                     </div>
