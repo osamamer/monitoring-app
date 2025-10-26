@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { quantumComputerAPI, simulationAPI } from '../services/Api';
 import QuantumComputerCard from '../components/QuantumComputerCard';
 import type {QuantumComputer} from '../types';
+import {useAuth} from "../context/AuthContext.tsx";
 
 function MainPage() {
     const [computers, setComputers] = useState<QuantumComputer[]>([]);
     const [isSimulationRunning, setIsSimulationRunning] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const { user, logout } = useAuth();
 
     useEffect(() => {
         fetchData();
@@ -55,46 +57,74 @@ function MainPage() {
     }
 
     return (
-        <div className="min-h-screen px-8 py-12">
-            {/* Header */}
-            <header className="text-center mb-12">
-                <h1 className="text-5xl font-bold text-text-primary mb-4 flex items-center justify-center gap-4">
-                    Quantum Computing Dashboard
+        <div className="min-h-screen">
+            <nav className="bg-dark-bgSecondary shadow-lg border-b border-gray-800">
+                <div className="max-w-7xl mx-auto px-8 py-4">
+                    <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-3">
+                            <div className="text-2xl">⚛️</div>
+                            <div>
+                                <h2 className="text-xl font-bold text-text-primary">Quantum Dashboard</h2>
+                                <p className="text-sm text-text-secondary">Real-time monitoring</p>
+                            </div>
+                        </div>
 
-                </h1>
-                <p className="text-xl text-text-secondary">
-                    Real-time monitoring of quantum computers
-                </p>
-            </header>
+                        <div className="flex items-center gap-6">
+                            <div className="text-right">
+                                <p className="text-sm text-text-secondary">Logged in as</p>
+                                <p className="text-base font-semibold text-text-primary">{user?.username}</p>
+                            </div>
 
-            {/* Controls */}
-            <div className="flex justify-center items-center gap-6 mb-12">
-                <button
-                    onClick={toggleSimulation}
-                    className={`px-8 py-3 text-lg font-semibold rounded-xl shadow-lg transition-all duration-300 hover:scale-105 ${
-                        isSimulationRunning
-                            ? 'bg-red-500 hover:bg-red-600 text-white'
-                            : 'bg-green-500 hover:bg-green-600 text-white'
-                    }`}
-                >
-                    {isSimulationRunning ? '⏸ Stop Simulation' : '▶ Start Simulation'}
-                </button>
+                            <div className="h-10 w-px bg-gray-700"></div>
 
-                <div className="flex items-center gap-2 px-6 py-3 bg-dark-bgSecondary rounded-xl text-text-secondary">
-          <span
-              className={`w-3 h-3 rounded-full animate-pulse ${
-                  isSimulationRunning ? 'bg-green-500' : 'bg-red-500'
-              }`}
-          />
-                    {isSimulationRunning ? 'Simulation Active' : 'Simulation Inactive'}
+                            <button
+                                onClick={logout}
+                                className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-all duration-300 hover:scale-105"
+                            >
+                                Logout
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </nav>
 
-            {/* Computer Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                {computers.map(computer => (
-                    <QuantumComputerCard key={computer.id} computer={computer} />
-                ))}
+            <div className="px-8 py-12">
+                <header className="text-center mb-12">
+                    <h1 className="text-5xl font-bold text-text-primary mb-4 flex items-center justify-center gap-4">
+                        Quantum Computing Dashboard
+                    </h1>
+                    <p className="text-xl text-text-secondary">
+                        Real-time monitoring of quantum computers
+                    </p>
+                </header>
+
+                <div className="flex justify-center items-center gap-6 mb-12">
+                    <button
+                        onClick={toggleSimulation}
+                        className={`px-8 py-3 text-lg font-semibold rounded-xl shadow-lg transition-all duration-300 hover:scale-105 ${
+                            isSimulationRunning
+                                ? 'bg-red-500 hover:bg-red-600 text-white'
+                                : 'bg-green-500 hover:bg-green-600 text-white'
+                        }`}
+                    >
+                        {isSimulationRunning ? '⏸ Stop Simulation' : '▶ Start Simulation'}
+                    </button>
+
+                    <div className="flex items-center gap-2 px-6 py-3 bg-dark-bgSecondary rounded-xl text-text-secondary">
+                        <span
+                            className={`w-3 h-3 rounded-full animate-pulse ${
+                                isSimulationRunning ? 'bg-green-500' : 'bg-red-500'
+                            }`}
+                        />
+                        {isSimulationRunning ? 'Simulation Active' : 'Simulation Inactive'}
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                    {computers.map(computer => (
+                        <QuantumComputerCard key={computer.id} computer={computer} />
+                    ))}
+                </div>
             </div>
         </div>
     );

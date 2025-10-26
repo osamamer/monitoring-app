@@ -36,8 +36,8 @@ def create_user(db: Session, user: UserCreate) -> User:
     return db_user
 
 
-def authenticate_user(db: Session, username: str, password: str) -> Optional[User]:
-    user = get_user_by_username(db, username)
+def authenticate_user(db: Session, email: str, password: str) -> Optional[User]:
+    user = get_user_by_email(db, email)
 
     if not user:
         return None

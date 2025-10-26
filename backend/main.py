@@ -47,9 +47,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(quantum_computers.router)
-app.include_router(simulation.router)
-app.include_router(auth.router)
+app.include_router(quantum_computers.router, prefix="/api")
+app.include_router(simulation.router, prefix="/api")
+app.include_router(auth.router, prefix="/api")
 
 
 @app.get("/")

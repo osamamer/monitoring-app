@@ -3,7 +3,7 @@ from models.quantum_computer import QuantumComputer
 from typing import List
 
 router = APIRouter(
-    prefix="/api/quantum-computers",
+    prefix="/quantum-computers",
     tags=["quantum-computers"]
 )
 

@@ -5,7 +5,7 @@ import asyncio
 from typing import Dict, Optional
 
 router = APIRouter(
-    prefix="/api/simulation",
+    prefix="/simulation",
     tags=["simulation"]
 )
 
