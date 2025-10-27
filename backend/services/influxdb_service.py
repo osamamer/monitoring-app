@@ -28,7 +28,6 @@ class InfluxDBService:
                 .field("unit", metric.unit) \
                 .time(metric.timestamp)
             points.append(point)
-        # TODO: try writing them separately
         self.write_api.write(bucket=self.bucket, org=self.org, record=points)
 
     def close(self) -> None:

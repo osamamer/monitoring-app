@@ -13,7 +13,7 @@ load_dotenv()
 
 influxdb_service = InfluxDBService(
     url=os.getenv("INFLUXDB_URL", "http://localhost:8086"),
-    token=os.getenv("INFLUXDB_TOKEN", "my-super-secret-token"),
+    token=os.getenv("INFLUXDB_TOKEN", "token"),
     org=os.getenv("INFLUXDB_ORG", "lrz"),
     bucket=os.getenv("INFLUXDB_BUCKET", "quantum_metrics")
 )
