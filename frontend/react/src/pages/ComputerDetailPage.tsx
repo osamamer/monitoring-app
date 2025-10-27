@@ -126,33 +126,42 @@ function ComputerDetailPage() {
                     Real-Time Metrics
                 </h2>
 
-                <div className="grid grid-cols-1 gap-6">
-                    {/* Qubit Fidelity Panel */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
                     <GrafanaPanel
-                        title="Qubit Fidelity"
+                    title="Qubit Fidelity"
                         description="Measures how accurately qubits maintain their quantum state"
                         computerId={computer.id}
                         metric="qubit_fidelity"
-                        panelId="panel-1"
+                        panelId="4"
+                        unit="%"
 
                     />
 
-                    {/* Gate Error Rate Panel */}
+
                     <GrafanaPanel
                         title="Gate Error Rate"
                         description="Probability of errors during quantum gate operations"
                         computerId={computer.id}
                         metric="gate_error_rate"
-                        panelId="panel-1"
+                        panelId="4"
+                        unit="%"
                     />
-
-                    {/* Temperature Panel */}
                     <GrafanaPanel
-                        title="Operating Temperature"
-                        description="System temperature in millikelvin - critical for quantum coherence"
+                        title="Temperature"
+                        description="Measures the temperature of the quantum computer"
                         computerId={computer.id}
                         metric="temperature"
-                        panelId="panel-1"
+                        panelId="2"
+                        unit="mK"
+                    />
+
+                    <GrafanaPanel
+                        title="Performance Score"
+                        description="Live comparison of quantum computers' performance"
+                        computerId={computer.id}
+                        metric="performance_score"
+                        panelId="5"
+                        unit="score"
 
                     />
                 </div>
